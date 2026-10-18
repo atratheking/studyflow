@@ -1,0 +1,96 @@
+{
+  "name": "studyflow",
+  "productName": "StudyFlow",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An independently reverse-engineered recreation of Quizlet's interface and study workflows for macOS and Windows.",
+  "author": "StudyFlow contributors",
+  "license": "MIT",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "start": "npm run build && electron .",
+    "desktop:dev": "node scripts/dev.mjs",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "package:mac": "npm run build && electron-builder --mac dir --publish never",
+    "package:win": "npm run build && electron-builder --win zip --publish never",
+    "dist:mac": "npm run build && electron-builder --mac dmg zip --publish never",
+    "dist:win": "npm run build && electron-builder --win nsis zip --publish never",
+    "test:desktop": "npm run build -- --mode study-test && playwright test -c playwright.desktop.config.ts",
+    "format": "prettier --write src tests electron scripts *.ts *.json *.md .github/workflows/*.yml",
+    "screenshots": "node scripts/capture.mjs",
+    "test:auth": "playwright test -c playwright.auth.config.ts",
+    "test:desktop:online": "npm run build && playwright test -c playwright.desktop-online.config.ts"
+  },
+  "dependencies": {
+    "@fontsource/nunito-sans": "^5.3.0",
+    "@supabase/supabase-js": "^2.118.0",
+    "idb": "^8.0.3",
+    "lucide-react": "^0.468.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.4"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@playwright/test": "^1.64.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "electron": "^44.9.0",
+    "electron-builder": "^26.15.3",
+    "fake-indexeddb": "^6.2.4",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9",
+    "vitest": "^5.0.5"
+  },
+  "build": {
+    "appId": "app.studyflow.desktop",
+    "productName": "StudyFlow",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "licenses/**/*"
+    ],
+    "asar": true,
+    "mac": {
+      "category": "public.app-category.education",
+      "icon": "build/icon.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "artifactName": "StudyFlow-${version}-${os}-${arch}.${ext}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atratheking/studyflow.git"
+  },
+  "homepage": "https://github.com/atratheking/studyflow#readme",
+  "bugs": {
+    "url": "https://github.com/atratheking/studyflow/issues"
+  }
+}
